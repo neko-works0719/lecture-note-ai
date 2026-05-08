@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>講義音声ノートAI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 16px;
+    }
+    h1 { font-size: 1.3rem; margin-bottom: 16px; color: #1a1a2e; }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    label { display: block; font-size: 0.85rem; color: #666; margin-bottom: 6px; }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    input[type="file"] { margin-top: 4px; font-size: 0.9rem; }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    button:disabled { background: #aaa; }
+    .copy-btn {
+      width: auto;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      background: #e0e7ff;
+      color: #4f46e5;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+    .result-area {
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 60px;
+      margin-top: 8px;
+    }
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+    #status {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    #apiKeySection { }
+    .toggle-link {
+      font-size: 0.8rem;
+      color: #4f46e5;
+      cursor: pointer;
+      text-decoration: underline;
+      display: block;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎙️ 講義音声ノートAI</h1>
+
+  <!-- APIキーエリア -->
+  <div class="card" id="apiKeySection">
+    <label>Gemini APIキー</label>
+    <input type="password" id="apiKeyInput" placeholder="AIza..." />
+    <button onclick="saveApiKey()" style="margin-top:8px;width:auto;padding:8px 16px;font-size:0.85rem;">保存</button>
+    <span class="toggle-link" onclick="clearApiKey()">キーをリセット</span>
+  </div>
+
+  <!-- 入力エリア -->
+  <div class="card">
+    <label>講義名（任意）</label>
+    <input type="text" id="lectureName" placeholder="例：マーケティング論 第3回" />
+
+    <label style="margin-top:12px;">音声ファイル</label>
+    <input type="file" id="audioFile" accept="audio/*" />
+
+    <button id="runBtn" onclick="run()">▶ 文字起こし＆要約を実行</button>
+  </div>
+
+  <!-- ステータス -->
+  <div id="status"></div>
+
+  <!-- 文字起こし結果 -->
+  <div class="card" id="transcriptCard" style="display:none;">
+    <div class="section-title">📝 文字起こし</div>
+    <div class="result-area" id="transcriptResult"></div>
+    <button class="copy-btn" onclick="copyText('transcriptResult')">コピー</button>
+  </div>
+
+  <!-- 要約結果 -->
+  <div class="card" id="summaryCard" style="display:none;">
+    <div class="section-title">📋 要約・要点</div>
+    <div class="result-area" id="summaryResult"></div>
+    <button class="copy-btn" onclick="copyText('summaryResult')">コピー</button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
